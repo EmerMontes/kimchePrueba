@@ -13,7 +13,6 @@ function Characters(){
     const [selectStatus, setSelectStatus] = useState("");
     const [selectSpecie, setSelectSpecie] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
-    const [filterReset, setFilterReset] = useState(false);
 
     const {data: filterData, error: filterError, loading: filterLoadin} = useQuery(FILTER_CHARACTER,{variables:{numberPage: pageNumber}})
     const [getCharacter, {data,error, loading} ] = useLazyQuery(SEARCH_CHARACTERS)
@@ -77,7 +76,7 @@ function Characters(){
          } else {
             getCharacter({variables: { name: ""}}) 
          }
-    }, [inputValue, getCharacter, selectGender, selectSpecie, selectStatus, filterReset]);
+    }, [inputValue, getCharacter, selectGender, selectSpecie, selectStatus]);
 
     return <div onClick={()=>closeDialog()} >
 
