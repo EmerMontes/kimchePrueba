@@ -4,7 +4,7 @@ import Characters from './card/characters'
 function App() {
   return (
     <div>
-    <Characters/>
+     <Characters/> 
     </div>
   )
 }
