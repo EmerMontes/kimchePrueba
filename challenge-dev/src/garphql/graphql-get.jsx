@@ -1,14 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const All_CHARACTERS = gql`
-   query{
-    characters {
-     results{
-      name
-      image
-      id
-}}}`
-
 export const DETAIL_CHARACTERS = gql`
    query findCharacterDetail($idByCharacter: ID!){
     character(id: $idByCharacter) {
@@ -27,10 +18,25 @@ export const DETAIL_CHARACTERS = gql`
 }}`
 
 export const SEARCH_CHARACTERS = gql`
-query findCharacter($findCharacters: String){
-  characters(filter: {name: $findCharacters}) {
-  results{
-   name
-   id
-   image
-}}}`
+query findCharacter($name: String, $Specie: String,  $Gender: String, $Status: String){
+   characters(filter: {name: $name, species: $Specie, status: $Status, gender: $Gender}) {
+   results{
+    name
+    id
+    image
+ }}}`
+
+export const FILTER_CHARACTER = gql `
+query getAllSpecies ($numberPage: Int) {
+   characters(page: $numberPage){
+      info{
+         pages
+      }
+      results{
+         name
+         species
+         gender
+         status
+      }
+   }
+}`
