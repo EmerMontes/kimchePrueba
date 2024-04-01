@@ -1,6 +1,6 @@
 import { useLazyQuery,useQuery} from '@apollo/client';
 import { SEARCH_CHARACTERS, DETAIL_CHARACTERS, FILTER_CHARACTER } from '../garphql/graphql-get';
-import { useState, useEffect } from 'react';
+import { useState, useEffect , useRef} from 'react';
 
 function Characters(){
 
@@ -13,6 +13,7 @@ function Characters(){
     const [selectStatus, setSelectStatus] = useState("");
     const [selectSpecie, setSelectSpecie] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1)
 
     const {data: filterData, error: filterError, loading: filterLoadin} = useQuery(FILTER_CHARACTER,{variables:{numberPage: pageNumber}})
     const [getCharacter, {data,error, loading} ] = useLazyQuery(SEARCH_CHARACTERS)
@@ -35,15 +36,6 @@ function Characters(){
         getDetail({variables: { idByCharacter: id}})
         setShowDialog(true)
     }
-
-    // Actualizar funcion
-    const closeDialog = () => {
-       if (showDialog === true) {
-        setShowDialog(false)
-       }
-    }
-    //////////////////////////
-
      // ????
     if (error) <span>`Tenemos un error ${error}`</span>
     // // // //////////
@@ -62,39 +54,63 @@ function Characters(){
         if (name === "Status") {
             setSelectStatus(value)       
         }
+        setCurrentPage(1)
     }
     const resetFilters =()=>{
         setInputValue("");
         setSelectGender("");
         setSelectSpecie("");
         setSelectStatus("");
+        setCurrentPage(1)
+    }
+
+    const pagination = (more)=>{
+        if (more) {
+            setCurrentPage(currentPage + 1);
+        } else if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     }
 
     useEffect(() => {
-         if (inputValue !== '' || selectGender !== '' || selectSpecie !== '' || selectStatus !== '') {
-            getCharacter({ variables: {name: inputValue, Specie: selectSpecie, Status: selectStatus, Gender: selectGender} });
+         if (inputValue !== '' || selectGender !== '' || selectSpecie !== '' || selectStatus !== '' || currentPage !== 1) {
+            getCharacter({ variables: {name: inputValue, Specie: selectSpecie, Status: selectStatus, Gender: selectGender, Page: currentPage} });
          } else {
             getCharacter({variables: { name: ""}}) 
          }
-    }, [inputValue, getCharacter, selectGender, selectSpecie, selectStatus]);
+    }, [inputValue, getCharacter, selectGender, selectSpecie, selectStatus, currentPage]);
 
-    return <div onClick={()=>closeDialog()} >
+    const outside =useRef(null);
+    useEffect(()=>{
+        if (outside?.current) {
+            document.addEventListener("click", handleClick, true)
+        }
+    },[outside])
 
+    const handleClick=(event)=>{
+       if(!outside.current.contains(event.target)){
+        setShowDialog(false)
+       }
+    }
+
+    return <div>
 
         <input name='Input' type="text" placeholder="🔍︎"
         value={inputValue}
         onChange={handleSelects}/>
 
         <div>
-       <select name='Gender' onChange={handleSelects}>
-        {[...filterGender].map((gender)=>(
-            <option  value={gender}key={gender}>
-             {gender}
-            </option>
-        ))}
-       </select>
+        <select name='Gender' onChange={handleSelects}>
+         <option value="">All Gender</option>   
+         {[...filterGender].map((gender)=>(
+             <option  value={gender}key={gender}>
+              {gender}
+             </option>
+         ))}
+        </select>
 
         <select name='Status' onChange={handleSelects} >
+        <option value="">All Status</option>   
         {[...filterStatus].map((status)=>(
             <option value={status} key={status}>
              {status}
@@ -103,6 +119,7 @@ function Characters(){
         </select>
 
         <select name='Species' onChange={handleSelects}>
+         <option value="">All Species</option>   
         {[...filterSpecies].map((species)=>(
             <option value={species} key={species}>
              {species}
@@ -111,9 +128,7 @@ function Characters(){
        </select>
 
        <button onClick={()=>resetFilters()}>Reset</button>
-       </div>
-        
-        
+       </div>     
 
        {showDialog === true && (
          <dialog open>
@@ -123,7 +138,7 @@ function Characters(){
         ) : result.error ? (
             <p>Error loading character</p>
             ) : (
-            <div>
+            <div ref={outside}>
             <h2>{result?.data.character.name}</h2>
             <img loading="lazy" src={result?.data.character.image} alt={result?.data.character.name} />
             <p>Gender: {result?.data.character.gender}</p>
@@ -141,14 +156,23 @@ function Characters(){
 
        {loading ? <p>Loading...</p> :
       <div>
-      {data?.characters.results.map(({ id, name, image}) => (
-         <div key={id} onClick={()=>getDetailCharacter(id)}>
-            <p>{name}</p>
-            <img loading="lazy" src={image} alt={name} />
-         </div>
-      ))}
+      {data?.characters.results.length <= 0 ? <p>Characters  Not Found </p> : 
+          data?.characters.results.map(({ id, name, image}) => (
+              <div key={id} onClick={()=>getDetailCharacter(id)}>
+              <p>{name}</p>
+              <img loading="lazy" src={image} alt={name} />
+              </div>
+              ))} 
       </div> } 
 
+     <div>
+        <button onClick={()=>pagination(false)}>-</button>
+        <p>
+        {currentPage} /
+        {data?.characters.info.pages} 
+        </p>
+        <button onClick={()=>pagination(true)}>+</button>
+     </div>
     </div>
 }
 export default Characters;
