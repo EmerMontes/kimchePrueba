@@ -18,8 +18,12 @@ export const DETAIL_CHARACTERS = gql`
 }}`
 
 export const SEARCH_CHARACTERS = gql`
-query findCharacter($name: String, $Specie: String,  $Gender: String, $Status: String){
-   characters(filter: {name: $name, species: $Specie, status: $Status, gender: $Gender}) {
+query findCharacter($name: String, $Specie: String,  $Gender: String, $Status: String, $Page: Int){
+   characters(filter: {name: $name, species: $Specie, status: $Status, gender: $Gender} page: $Page) {
+   info{
+    next
+    pages
+   }
    results{
     name
     id
