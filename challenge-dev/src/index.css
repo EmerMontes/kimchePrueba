@@ -1,25 +1,25 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-
-  
+  font-weight: 400;  
   color: rgba(255, 255, 255, 0.87);
-  background-image: url('../public/background.jpg');
+  background-image: url('/background.jpg');
   background-size: cover;
   background-position: center;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-   
+}
+
+*{
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   display: flex;
   justify-content: center;
-  box-sizing: border-box;
 }
 
 h1 {
@@ -27,28 +27,18 @@ h1 {
   padding: 10px;
   color: black;
 }
+
 p{
   margin: 0;
   padding: 10px
 }
-
-
-
-/* button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-} */
-
-
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 5px;
+  flex-wrap: wrap;
 }
 
 .characters{
@@ -56,13 +46,15 @@ button:focus-visible {
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
 .character{
   padding: 5px;
 }
+
 .character:hover{
   transform: scale(1.1, 1.1) rotate(-1.5deg);
-  
 }
+
 .character p{
   background-color: rgba(17, 14, 14, 0.96);
   color: white;
@@ -74,33 +66,48 @@ button:focus-visible {
   border: solid;
   cursor: pointer;
 }
+
 .imgs{
   border-radius: 50%;
-  width: 15em;
+  width: 92%;
   margin: 10px;
   border: solid;
   cursor: pointer;
+  view-timeline-name: --image;
+	view-timeline-axis: block;
+
+	animation-timeline: --image;
+	animation-name: show;
+
+	animation-range: entry 25% cover 30%;
+	animation-fill-mode: both;
 }
+
 .imgs:hover {
   background-color: aqua;
 }
+
 .pagination{
   display: flex;
   justify-content: flex-end;
-  padding: 0 20px;
+  padding: 5px 20px;
   align-items: center;
 }
+
 .pagination input{
   width: 3em;
   border-radius: 0px;
 }
+
 .pagination button{
   padding: 10px;
 }
+
 .dialog + .characters{
   filter: blur(1px); 
   pointer-events: none; 
 }
+
 .dialog{
   z-index: 900;
   position: fixed;
@@ -108,10 +115,12 @@ button:focus-visible {
   border-radius: 10px;
  
 }
+
 .detail{
   display: flex;
   justify-content: center; 
 }
+
 .detail img{
   width: 60%;
   border-radius: 15px;
@@ -125,79 +134,110 @@ button:focus-visible {
   justify-content: center;
   position: relative;
 }
+
 .detailResumen p{
   padding: 0;
   text-align: left
 }
+
 .detailResumen h2{
   margin: 0 auto;
   padding: 5px;
 }
+
 .detailResumen button{
   align-self: flex-end;
   position: absolute;
   top: 0px;
   right: 0px;
 }
+
 button{
   background-color: rgb(104, 52, 247);
   border: 1px;
   padding: 5px;
   cursor: pointer;
 }
+
 .detailResumen button:hover{
   cursor: pointer;
   background-color: rgb(243, 68, 68);
 }
+
 .logo{
-  width: 90px;
+  width: 40%;
 }
+
 .kimche{
-  display:flex;
+  align-items: center;
+  display: flex;
   color: #000000;
   padding: 5px;
+  justify-content: space-evenly;
 }
+
 select{
   cursor: pointer;
   height: 2em;
   border-radius: 5px;
 }
+
 input{
   cursor: pointer;
   border-radius: 10px;
-  height: 2em;
+  height: 2.5em;
   width: 17em;
 }
+
 .filters{
   display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
+
 .search{
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-
+  flex-wrap: wrap;
 }
-button:disabled {
 
+.search input{
+  width: 60%;
+  max-width: 20em;
+}
+
+button:disabled {
   background-color: grey;
   cursor: not-allowed;
 }
 
-
 .reset {
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 6px 12px;
-  width: 95px;
+  width: 55px;
   background: #ff0e0234;
   border-radius: 10px;
+  height: 2.5em;
 }
-
 
 .reset:hover .svgIcon {
   animation: spin 2s linear infinite;
+}
+
+.logoLink{
+  width: 35px;
+}
+
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
 }
 
 @keyframes spin {
@@ -209,3 +249,96 @@ button:disabled {
     transform: rotate(-360deg);
   }
 }
+
+@keyframes show {
+	from {
+		opacity: 0;
+		scale: 25%;
+	}
+
+	to {
+		opacity: 1;
+		scale: 100%;
+	}
+}
+
+.presentation{
+  z-index: 100;
+  width: 80%;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.presentationOut{
+  z-index: 100;
+  width: 80%;
+  flex-wrap: wrap;
+  display: flex;
+  animation: fade-out 0.8s ease-out forwards; 
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.presentation h2{
+  margin: 0 auto;
+}
+
+.presentation div{
+  width: 100%;
+}
+
+.saludos{
+  width: 12%
+}
+
+.logoKimche{
+  width: 50%;
+  max-width: 150px;
+}
+
+.loading {
+  width: 3.25em;
+  transform-origin: center;
+  animation: rotate4 2s linear infinite;
+}
+ 
+circle {
+  fill: none;
+  stroke: hsl(214, 97%, 59%);
+  stroke-width: 2;
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: dash4 1.5s ease-in-out infinite;
+}
+ 
+@keyframes rotate4 {
+  100% {
+   transform: rotate(360deg);
+  }
+}
+ 
+@keyframes dash4 {
+  0% {
+   stroke-dasharray: 1, 200;
+   stroke-dashoffset: 0;
+  }
+ 
+  50% {
+   stroke-dasharray: 90, 200;
+   stroke-dashoffset: -35px;
+  }
+ 
+  100% {
+   stroke-dashoffset: -125px;
+  }
+}
+ 

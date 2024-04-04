@@ -1,5 +1,5 @@
 import './App.css'
-import Characters from './card/characters'
+import Characters from './page/characters'
 
 function App() {
   return (
